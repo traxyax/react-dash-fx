@@ -44,6 +44,13 @@ public class Sale {
 
     }
 
+    public Sale(LocalDate date, int agentCode, int unitPrice, int quantity) {
+        this.date = date;
+        this.agentCode = agentCode;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+    }
+
     public Sale(LocalDate date, int agentCode, String productCode, int unitPrice, int quantity, int amount) {
         this.date = date;
         this.agentCode = agentCode;
