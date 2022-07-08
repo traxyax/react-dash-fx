@@ -2,6 +2,7 @@ package com.pultrax.reactdashfx.fxcontroller;
 
 import com.pultrax.reactdashfx.sale.Sale;
 import com.pultrax.reactdashfx.sale.SaleService;
+import com.pultrax.reactdashfx.sale.interfaces.ISaleCountByUnitPriceXQuantity;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @Component
@@ -85,6 +87,8 @@ public class DashboardController implements Initializable {
 
     private ObservableList<Sale> sales;
 
+    private List<ISaleCountByUnitPriceXQuantity> pieChartData;
+
     @Autowired
     private DashboardController(SaleService saleService) {
         DashboardController.saleService = saleService;
@@ -103,10 +107,13 @@ public class DashboardController implements Initializable {
         initData();
         initLabel();
         initTable();
+        drawChart();
     }
 
     private void initData() {
         sales = FXCollections.observableList(saleService.getSales());
+        pieChartData = saleService.getPieChartData();
+//        System.out.println(pieChartData.get(0).getUnitPrice());
     }
 
     private void initTable() {
@@ -133,5 +140,19 @@ public class DashboardController implements Initializable {
         turnoverL.setText(
                 String.valueOf(saleService.getTurnover()) + " FCFA"
         );
+    }
+
+    private void drawChart() {
+        drawPieChart();
+    }
+
+    private void drawPieChart() {
+        for (ISaleCountByUnitPriceXQuantity data :
+                pieChartData) {
+            pieChart.getData().add(new PieChart.Data(
+                    String.valueOf(data.getUnitPrice()),
+                    data.getTotalAmount()
+            ));
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.pultrax.reactdashfx.sale;
 
+import com.pultrax.reactdashfx.sale.interfaces.ISaleCountByUnitPriceXQuantity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,10 @@ public class SaleService {
 
     public Long getTurnover() {
         return saleRepository.sumUnitPriceXQuantity();
+    }
+
+    public List<ISaleCountByUnitPriceXQuantity> getPieChartData() {
+        return saleRepository.findSaleByUnitPriceXQuantity();
     }
 
     public void addNewSale(List<Sale> sales) {
