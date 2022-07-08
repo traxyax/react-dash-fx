@@ -1,5 +1,7 @@
 package com.pultrax.reactdashfx;
 
+import com.pultrax.reactdashfx.ui.ReactDashUI;
+import javafx.application.Application;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ReactDashFxApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ReactDashFxApplication.class, args);
+        Application.launch(ReactDashUI.class, args);
     }
 
 }
