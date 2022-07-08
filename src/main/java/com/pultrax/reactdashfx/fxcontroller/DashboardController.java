@@ -1,6 +1,9 @@
 package com.pultrax.reactdashfx.fxcontroller;
 
+import com.pultrax.reactdashfx.sale.Sale;
 import com.pultrax.reactdashfx.sale.SaleService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
@@ -11,20 +14,22 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 @Component
 public class DashboardController implements Initializable {
 
     @FXML
-    private TableColumn<?, ?> agentCodeCol;
+    private TableColumn<Sale, Integer> agentCodeCol;
 
     @FXML
-    private TableColumn<?, ?> amountCol;
+    private TableColumn<Sale, Integer> amountCol;
 
     @FXML
     private CheckBox areaCB;
@@ -39,7 +44,7 @@ public class DashboardController implements Initializable {
     private BarChart<?, ?> barChart;
 
     @FXML
-    private TableColumn<?, ?> dateCol;
+    private TableColumn<Sale, LocalDate> dateCol;
 
     @FXML
     private CheckBox lineCB;
@@ -60,13 +65,13 @@ public class DashboardController implements Initializable {
     private PieChart pieChart;
 
     @FXML
-    private TableColumn<?, ?> productCodeCol;
+    private TableColumn<Sale, String> productCodeCol;
 
     @FXML
-    private TableColumn<?, ?> quant;
+    private TableColumn<Sale, Integer> quantityCol;
 
     @FXML
-    private TableView<?> saleTable;
+    private TableView<Sale> saleTable;
 
     @FXML
     private Label turnoverL;
@@ -77,6 +82,8 @@ public class DashboardController implements Initializable {
     private static DashboardController instance;
 
     private static SaleService saleService;
+
+    private ObservableList<Sale> sales;
 
     @Autowired
     private DashboardController(SaleService saleService) {
@@ -93,6 +100,38 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println(saleService.getSales());
+        initData();
+        initLabel();
+        initTable();
+    }
+
+    private void initData() {
+        sales = FXCollections.observableList(saleService.getSales());
+    }
+
+    private void initTable() {
+        agentCodeCol.setCellValueFactory(new PropertyValueFactory<>("agentCode"));
+        productCodeCol.setCellValueFactory(new PropertyValueFactory<>("productCode"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        unitPriceCol.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        refreshTable();
+    }
+
+    private void refreshTable() {
+        saleTable.setItems(sales);
+    }
+
+    private void initLabel() {
+        nbAgentL.setText(
+                String.valueOf(saleService.getNbAgent())
+        );
+        nbProductL.setText(
+                String.valueOf(saleService.getNbProduit())
+        );
+        turnoverL.setText(
+                String.valueOf(saleService.getTurnover()) + " FCFA"
+        );
     }
 }

@@ -95,14 +95,14 @@
       </HBox>
    </center>
    <bottom>
-      <TableView fx:id="saleTable" prefHeight="300.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="saleTable" prefHeight="300.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="dateCol" prefWidth="75.0" text="Date" />
           <TableColumn fx:id="agentCodeCol" prefWidth="75.0" text="Code Agent" />
             <TableColumn fx:id="productCodeCol" prefWidth="75.0" text="Code Produit" />
             <TableColumn fx:id="unitPriceCol" prefWidth="75.0" text="Prix Unitaire" />
-            <TableColumn fx:id="quant" prefWidth="75.0" text="Quantité" />
-            <TableColumn fx:id="amountCol" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="Montant" />
+            <TableColumn fx:id="quantityCol" prefWidth="75.0" text="Quantité" />
+            <TableColumn fx:id="amountCol" prefWidth="75.0" text="Montant" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

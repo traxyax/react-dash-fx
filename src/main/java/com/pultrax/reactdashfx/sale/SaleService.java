@@ -22,6 +22,18 @@ public class SaleService {
         return saleRepository.findAll();
     }
 
+    public Long getNbAgent() {
+        return saleRepository.countDistinctByAgentCode();
+    }
+
+    public Long getNbProduit() {
+        return saleRepository.countDistinctByUnitPrice();
+    }
+
+    public Long getTurnover() {
+        return saleRepository.sumUnitPriceXQuantity();
+    }
+
     public void addNewSale(List<Sale> sales) {
         saleRepository.saveAll(sales);
     }
