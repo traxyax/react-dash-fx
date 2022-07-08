@@ -1,7 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
 
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <BorderPane BorderPane.alignment="CENTER">
+         <left>
+            <HBox BorderPane.alignment="CENTER">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Agents: " />
+                  <Label fx:id="nbAgentL" text="0" />
+               </children>
+            </HBox>
+         </left>
+         <center>
+            <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Produits: " />
+                  <Label fx:id="nbProductL" text="0" />
+               </children>
+            </HBox>
+         </center>
+         <right>
+            <HBox BorderPane.alignment="CENTER">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chiffre d'Affaire: " />
+                  <Label fx:id="turnoverL" text="0" />
+               </children>
+            </HBox>
+         </right>
+         <bottom>
+            <HBox spacing="25.0" BorderPane.alignment="CENTER">
+               <children>
+                  <CheckBox fx:id="areaCB" mnemonicParsing="false" selected="true" text="Area Chart" />
+                  <CheckBox fx:id="barCB" mnemonicParsing="false" selected="true" text="Bar Chart" />
+                  <CheckBox fx:id="pieCB" mnemonicParsing="false" selected="true" text="Pie Chart" />
+                  <CheckBox fx:id="lineCB" mnemonicParsing="false" selected="true" text="Line Chart" />
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </top>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
+   <center>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <AreaChart fx:id="areaChart" title="Epuisement des stocks">
+              <xAxis>
+                <CategoryAxis label="Date" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis label="Vente" side="LEFT" />
+              </yAxis>
+            </AreaChart>
+            <BarChart fx:id="barChart" title="Performance des agents">
+              <xAxis>
+                <CategoryAxis label="Agent" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis label="Vente" side="LEFT" />
+              </yAxis>
+            </BarChart>
+            <PieChart fx:id="pieChart" title="Rentabilité des produits" />
+            <LineChart fx:id="lineChart" title="Vente par jour">
+              <xAxis>
+                <CategoryAxis label="Date" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis label="Montant" side="LEFT" />
+              </yAxis>
+            </LineChart>
+         </children>
+      </HBox>
+   </center>
+   <bottom>
+      <TableView fx:id="saleTable" prefHeight="300.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="dateCol" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="agentCodeCol" prefWidth="75.0" text="Code Agent" />
+            <TableColumn fx:id="productCodeCol" prefWidth="75.0" text="Code Produit" />
+            <TableColumn fx:id="unitPriceCol" prefWidth="75.0" text="Prix Unitaire" />
+            <TableColumn fx:id="quant" prefWidth="75.0" text="Quantité" />
+            <TableColumn fx:id="amountCol" maxWidth="-1.0" minWidth="-1.0" prefWidth="-1.0" text="Montant" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </bottom>
+</BorderPane>
