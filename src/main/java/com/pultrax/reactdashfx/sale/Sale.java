@@ -51,15 +51,6 @@ public class Sale {
         this.quantity = quantity;
     }
 
-    public Sale(LocalDate date, int agentCode, String productCode, int unitPrice, int quantity, int amount) {
-        this.date = date;
-        this.agentCode = agentCode;
-        this.productCode = productCode;
-        this.unitPrice = unitPrice;
-        this.quantity = quantity;
-        this.amount = amount;
-    }
-
     public Long getId() {
         return id;
     }
@@ -122,10 +113,10 @@ public class Sale {
                 "id=" + id +
                 ", date=" + date +
                 ", agentCode=" + agentCode +
-                ", productCode='" + productCode + '\'' +
+                ", productCode='" + getProductCode() + '\'' +
                 ", unitPrice=" + unitPrice +
                 ", quantity=" + quantity +
-                ", amount=" + amount +
+                ", amount=" + getAmount() +
                 '}';
     }
 }

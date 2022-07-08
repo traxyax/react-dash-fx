@@ -18,6 +18,10 @@ public class SaleService {
         saleRepository.save(sale);
     }
 
+    public List<Sale> getSales() {
+        return saleRepository.findAll();
+    }
+
     public void addNewSale(List<Sale> sales) {
         saleRepository.saveAll(sales);
     }

@@ -1,5 +1,6 @@
 package com.pultrax.reactdashfx.fxcontroller;
 
+import com.pultrax.reactdashfx.sale.SaleService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
@@ -10,6 +11,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
@@ -74,13 +76,16 @@ public class DashboardController implements Initializable {
 
     private static DashboardController instance;
 
-    private DashboardController() {
+    private static SaleService saleService;
 
+    @Autowired
+    private DashboardController(SaleService saleService) {
+        DashboardController.saleService = saleService;
     }
 
     public static DashboardController getInstance() {
         if (instance == null) {
-            instance = new DashboardController();
+            instance = new DashboardController(DashboardController.saleService);
         }
 
         return instance;
@@ -88,6 +93,6 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        System.out.println(saleService.getSales());
     }
 }
