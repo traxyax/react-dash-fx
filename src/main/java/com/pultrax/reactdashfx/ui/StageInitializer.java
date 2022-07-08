@@ -1,5 +1,6 @@
 package com.pultrax.reactdashfx.ui;
 
+import com.pultrax.reactdashfx.fxcontroller.DashboardController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +22,8 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
     public void onApplicationEvent(StageReadyEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(dashResource.getURL());
-            fxmlLoader.setControllerFactory(ReactDashUI.configurableApplicationContext::getBean);
+            fxmlLoader.setControllerFactory(ReactDashUI.getConfigurableApplicationContext()::getBean);
+            fxmlLoader.setController(DashboardController.getInstance());
             Parent parent = fxmlLoader.load();
 
             Stage stage = event.getStage();

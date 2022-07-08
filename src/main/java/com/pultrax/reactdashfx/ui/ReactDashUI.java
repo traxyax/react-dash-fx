@@ -9,7 +9,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 public class ReactDashUI extends Application {
 
-    public static ConfigurableApplicationContext configurableApplicationContext;
+    private static ConfigurableApplicationContext configurableApplicationContext;
+
+    public static ConfigurableApplicationContext getConfigurableApplicationContext() {
+        return configurableApplicationContext;
+    }
 
     @Override
     public void init() throws Exception {
