@@ -8,6 +8,7 @@ import com.pultrax.reactdashfx.sale.interfaces.ISumUnitPriceXQuantitySaleByDate;
 import com.pultrax.reactdashfx.sale.interfaces.IUnitPriceAndTotalQuantityByDateAndUnitPrice;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
@@ -16,6 +17,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +30,12 @@ import java.util.ResourceBundle;
 
 @Component
 public class DashboardController implements Initializable {
+
+    @FXML
+    private BorderPane rootWindow;
+
+    @FXML
+    private HBox chartHBox;
 
     @FXML
     private TableColumn<Sale, Integer> agentCodeCol;
@@ -50,6 +60,9 @@ public class DashboardController implements Initializable {
 
     @FXML
     private CheckBox lineCB;
+
+    @FXML
+    private CheckBox tableCB;
 
     @FXML
     private LineChart<String, Number> lineChart;
@@ -232,7 +245,7 @@ public class DashboardController implements Initializable {
         for (ISaleCountByUnitPriceXQuantity data :
                 pieChartData) {
             pieChart.getData().add(new PieChart.Data(
-                    String.valueOf(data.getUnitPrice()),
+                    "AB" + String.valueOf(data.getUnitPrice()),
                     data.getTotalAmount()
             ));
         }
@@ -251,5 +264,50 @@ public class DashboardController implements Initializable {
         refreshTable();
         clearChart();
         drawChart();
+    }
+
+    @FXML
+    private void toggleAreaChart(ActionEvent event) {
+        if(areaCB.isSelected()){
+            chartHBox.getChildren().add(areaChart);
+        }else {
+            chartHBox.getChildren().remove(areaChart);
+        }
+    }
+
+    @FXML
+    private void toggleBarChart(ActionEvent event) {
+        if(barCB.isSelected()){
+            chartHBox.getChildren().add(barChart);
+        }else {
+            chartHBox.getChildren().remove(barChart);
+        }
+    }
+
+    @FXML
+    private void togglePieChart(ActionEvent event) {
+        if(pieCB.isSelected()){
+            chartHBox.getChildren().add(pieChart);
+        }else {
+            chartHBox.getChildren().remove(pieChart);
+        }
+    }
+
+    @FXML
+    private void toggleLineChart(ActionEvent event) {
+        if(lineCB.isSelected()){
+            chartHBox.getChildren().add(lineChart);
+        }else {
+            chartHBox.getChildren().remove(lineChart);
+        }
+    }
+
+    @FXML
+    private void toggleTable(ActionEvent event) {
+        if (tableCB.isSelected()) {
+            rootWindow.setBottom(saleTable);
+        } else {
+            rootWindow.getChildren().remove(saleTable);
+        }
     }
 }
