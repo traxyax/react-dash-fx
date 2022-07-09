@@ -1,6 +1,9 @@
 package com.pultrax.reactdashfx.sale;
 
 import com.pultrax.reactdashfx.sale.interfaces.ISaleCountByUnitPriceXQuantity;
+import com.pultrax.reactdashfx.sale.interfaces.ISaleTotalAmountByAgentCodeAndYear;
+import com.pultrax.reactdashfx.sale.interfaces.ISumUnitPriceXQuantitySaleByDate;
+import com.pultrax.reactdashfx.sale.interfaces.IUnitPriceAndTotalQuantityByDateAndUnitPrice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +40,26 @@ public class SaleService {
 
     public List<ISaleCountByUnitPriceXQuantity> getPieChartData() {
         return saleRepository.findSaleByUnitPriceXQuantity();
+    }
+
+    public List<ISumUnitPriceXQuantitySaleByDate> getLineChartData() {
+        return saleRepository.findTotalAmountSaleByDate();
+    }
+
+    public List<ISaleTotalAmountByAgentCodeAndYear> getBarChartData(String year) {
+        return saleRepository.findSaleTotalAmountByAgentCodeAndYear(year);
+    }
+
+    public List<IUnitPriceAndTotalQuantityByDateAndUnitPrice> getAreaChartData(){
+        return saleRepository.findUnitPriceAndTotalQuantityByDateAndUnitPrice();
+    }
+
+    public List<String> getUnitPrice() {
+        return saleRepository.findDistinctUnitPrice();
+    }
+
+    public List<String> getSaleYears() {
+        return saleRepository.findDistinctYear();
     }
 
     public void addNewSale(List<Sale> sales) {

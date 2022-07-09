@@ -3,14 +3,14 @@ package com.pultrax.reactdashfx.fxcontroller;
 import com.pultrax.reactdashfx.sale.Sale;
 import com.pultrax.reactdashfx.sale.SaleService;
 import com.pultrax.reactdashfx.sale.interfaces.ISaleCountByUnitPriceXQuantity;
+import com.pultrax.reactdashfx.sale.interfaces.ISaleTotalAmountByAgentCodeAndYear;
+import com.pultrax.reactdashfx.sale.interfaces.ISumUnitPriceXQuantitySaleByDate;
+import com.pultrax.reactdashfx.sale.interfaces.IUnitPriceAndTotalQuantityByDateAndUnitPrice;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -37,13 +37,13 @@ public class DashboardController implements Initializable {
     private CheckBox areaCB;
 
     @FXML
-    private AreaChart<?, ?> areaChart;
+    private AreaChart<String, Number> areaChart;
 
     @FXML
     private CheckBox barCB;
 
     @FXML
-    private BarChart<?, ?> barChart;
+    private BarChart<String, Number> barChart;
 
     @FXML
     private TableColumn<Sale, LocalDate> dateCol;
@@ -52,7 +52,7 @@ public class DashboardController implements Initializable {
     private CheckBox lineCB;
 
     @FXML
-    private LineChart<?, ?> lineChart;
+    private LineChart<String, Number> lineChart;
 
     @FXML
     private Label nbAgentL;
@@ -89,6 +89,16 @@ public class DashboardController implements Initializable {
 
     private List<ISaleCountByUnitPriceXQuantity> pieChartData;
 
+    private List<ISumUnitPriceXQuantitySaleByDate> lineChartData;
+
+    private List<ISaleTotalAmountByAgentCodeAndYear> barChartData;
+
+    private List<IUnitPriceAndTotalQuantityByDateAndUnitPrice> areaChartData;
+
+    private List<String> years;
+
+    private Long nbProduct;
+
     @Autowired
     private DashboardController(SaleService saleService) {
         DashboardController.saleService = saleService;
@@ -113,7 +123,10 @@ public class DashboardController implements Initializable {
     private void initData() {
         sales = FXCollections.observableList(saleService.getSales());
         pieChartData = saleService.getPieChartData();
-//        System.out.println(pieChartData.get(0).getUnitPrice());
+        lineChartData = saleService.getLineChartData();
+        areaChartData = saleService.getAreaChartData();
+        years = saleService.getSaleYears();
+        nbProduct = saleService.getNbProduit();
     }
 
     private void initTable() {
@@ -135,7 +148,7 @@ public class DashboardController implements Initializable {
                 String.valueOf(saleService.getNbAgent())
         );
         nbProductL.setText(
-                String.valueOf(saleService.getNbProduit())
+                String.valueOf(nbProduct)
         );
         turnoverL.setText(
                 String.valueOf(saleService.getTurnover()) + " FCFA"
@@ -144,6 +157,75 @@ public class DashboardController implements Initializable {
 
     private void drawChart() {
         drawPieChart();
+        drawLineChart();
+        drawBarChart();
+        drawAreaChart();
+    }
+
+    private void drawAreaChart() {
+        Object t [][] = new Object[Math.toIntExact(nbProduct)][Math.toIntExact(nbProduct)];
+
+        List<String> listProduit = saleService.getUnitPrice();
+
+        for(int i = 0; i< listProduit.size(); i++){
+            t[i][0] = listProduit.get(i);
+        }
+
+
+        for(int i = 0; i < nbProduct; i++){
+            t[i][1] = new XYChart.Series<String, Number>();
+        }
+
+        XYChart.Series<String, Number> sr = null;
+
+        for (IUnitPriceAndTotalQuantityByDateAndUnitPrice data: areaChartData) {
+            for (int i = 0; i < nbProduct; i++){
+
+                if(t[i][0].equals(String.valueOf(data.getUnitPrice()))){
+                    sr = (XYChart.Series<String, Number>) t[i][1];
+                    sr.getData().add(new XYChart.Data<String, Number>(data.getDate().toString(), data.getTotalQuantity()));
+                }
+            }
+        }
+
+        for(int i = 0; i < nbProduct; i++){
+            sr = (XYChart.Series<String, Number>) t[i][1];
+            sr.setName("AB"+t[i][0].toString());
+
+            areaChart.getData().add(sr);
+        }
+    }
+
+    private void drawBarChart() {
+
+        for (String year:
+             years) {
+
+            barChartData = saleService.getBarChartData(year);
+
+            XYChart.Series<String, Number> dataSeries = new XYChart.Series<String, Number>();
+            dataSeries.setName(year);
+
+            for (ISaleTotalAmountByAgentCodeAndYear data:
+                 barChartData) {
+
+                dataSeries.getData().add(new XYChart.Data<String, Number>(String.valueOf(data.getAgentCode()), data.getTotalAmount()));
+            }
+
+            barChart.getData().add(dataSeries);
+        }
+    }
+
+    private void drawLineChart() {
+        XYChart.Series<String, Number> dataSeries = new XYChart.Series<String, Number>();
+        dataSeries.setName("All Year");
+
+        for (ISumUnitPriceXQuantitySaleByDate data:
+             lineChartData) {
+            dataSeries.getData().add(new XYChart.Data<String, Number>(data.getDate().toString(), data.getTotalAmount()));
+        }
+
+        lineChart.getData().add(dataSeries);
     }
 
     private void drawPieChart() {
