@@ -237,4 +237,19 @@ public class DashboardController implements Initializable {
             ));
         }
     }
+
+    private void clearChart(){
+        pieChart.getData().clear();
+        lineChart.getData().clear();
+        areaChart.getData().clear();
+        barChart.getData().clear();
+    }
+
+    public void update(){
+        initData();
+        initLabel();
+        refreshTable();
+        clearChart();
+        drawChart();
+    }
 }
