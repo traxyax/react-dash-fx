@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'JetBrains Mono Regular';
+    src: url("../fonts/NovaMono-Regular.ttf");
+}
+
+.root {
+    -fx-font-family: 'JetBrains Mono Regular';
+    -fx-border-width: 10px;
+    -fx-border-color: grey;
+}
