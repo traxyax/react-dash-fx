@@ -7,22 +7,22 @@ import org.springframework.context.annotation.Bean;
 public class DBConfig {
 
     @Value("${database.host}")
-    private String dbHost;
+    private String dbHost = "localhost";
 
     @Value("${database.port}")
-    private int dbPort;
+    private String dbPort = "3306";
 
     @Value("${database.username}")
-    private String  dbUsername;
+    private String  dbUsername = "trax";
 
     @Value("${database.password}")
-    private String dbPassword;
+    private String dbPassword = "pass";
 
     @Value("${database.name}")
-    private String dbName;
+    private String dbName = "db_javafx";
 
     @Value("${database.type}")
-    private String dbType;
+    private String dbType = "mysql";
 
     @Bean
     public Configuration dbConnector() {
