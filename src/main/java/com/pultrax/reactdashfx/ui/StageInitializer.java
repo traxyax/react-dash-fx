@@ -16,6 +16,9 @@ import java.io.IOException;
 @Component
 public class StageInitializer implements ApplicationListener<StageReadyEvent> {
 
+    @Value("${app.name}")
+    private String appName;
+
     @Value("classpath:/fxml/Dashboard.fxml")
     private Resource dashResource;
 
@@ -40,7 +43,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
             scene.getStylesheets().add(getClass().getResource("/css/global.css").toExternalForm());
 
             stage.setScene(scene);
-            stage.setTitle("Reactive Dashboard");
+            stage.setTitle(appName);
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
