@@ -1,0 +1,25 @@
+app:
+  name: Reactive Dashboard
+
+database:
+  type: mysql
+  name: db_javafx
+  host: localhost
+  port: 3306
+  username: root
+  password: 
+
+spring:
+  main:
+    web-application-type: none
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+#    show-sql: true
+
+  datasource:
+    url: jdbc:${database.type}://${database.host}:${database.port}/${database.name}
+    username: ${database.username}
+    password: ${database.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
