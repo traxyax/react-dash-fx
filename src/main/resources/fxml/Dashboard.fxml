@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="rootWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="rootWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
@@ -67,7 +67,7 @@
    <center>
       <HBox fx:id="chartHBox" BorderPane.alignment="CENTER">
          <children>
-            <AreaChart fx:id="areaChart" title="Epuisement des stocks">
+            <AreaChart fx:id="areaChart" title="Epuisement des stocks" HBox.hgrow="ALWAYS">
               <xAxis>
                 <CategoryAxis label="Date" side="BOTTOM" />
               </xAxis>
@@ -75,7 +75,7 @@
                 <NumberAxis label="Vente" side="LEFT" />
               </yAxis>
             </AreaChart>
-            <BarChart fx:id="barChart" title="Performance des agents">
+            <BarChart fx:id="barChart" title="Performance des agents" HBox.hgrow="ALWAYS">
               <xAxis>
                 <CategoryAxis label="Agent" side="BOTTOM" />
               </xAxis>
@@ -83,8 +83,8 @@
                 <NumberAxis label="Vente" side="LEFT" />
               </yAxis>
             </BarChart>
-            <PieChart fx:id="pieChart" title="Rentabilité des produits" />
-            <LineChart fx:id="lineChart" title="Vente par jour">
+            <PieChart fx:id="pieChart" title="Rentabilité des produits" HBox.hgrow="ALWAYS" />
+            <LineChart fx:id="lineChart" title="Vente par jour" HBox.hgrow="ALWAYS">
               <xAxis>
                 <CategoryAxis label="Date" side="BOTTOM" />
               </xAxis>
