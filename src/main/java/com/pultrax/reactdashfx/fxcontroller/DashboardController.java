@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -21,12 +22,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
 public class DashboardController implements Initializable {
 
     @FXML
-    private BorderPane rootWindow;
+    private HBox tableHBox;
 
     @FXML
     private HBox chartHBox;
@@ -170,7 +170,7 @@ public class DashboardController implements Initializable {
                 String.valueOf(nbProduct)
         );
         turnoverL.setText(
-                String.valueOf(saleService.getTurnover()) + " FCFA"
+                saleService.getTurnover() + " FCFA"
         );
     }
 
@@ -182,7 +182,7 @@ public class DashboardController implements Initializable {
     }
 
     private void drawAreaChart() {
-        Object t [][] = new Object[Math.toIntExact(nbProduct)][Math.toIntExact(nbProduct)];
+        Object[][] t = new Object[Math.toIntExact(nbProduct)][Math.toIntExact(nbProduct)];
 
         List<String> listProduit = saleService.getUnitPrice();
 
@@ -195,14 +195,14 @@ public class DashboardController implements Initializable {
             t[i][1] = new XYChart.Series<String, Number>();
         }
 
-        XYChart.Series<String, Number> sr = null;
+        XYChart.Series<String, Number> sr;
 
         for (IUnitPriceAndTotalQuantityByDateAndUnitPrice data: areaChartData) {
             for (int i = 0; i < nbProduct; i++){
 
                 if(t[i][0].equals(String.valueOf(data.getUnitPrice()))){
                     sr = (XYChart.Series<String, Number>) t[i][1];
-                    sr.getData().add(new XYChart.Data<String, Number>(data.getDate().toString(), data.getTotalQuantity()));
+                    sr.getData().add(new XYChart.Data<>(data.getDate().toString(), data.getTotalQuantity()));
                 }
             }
         }
@@ -222,13 +222,13 @@ public class DashboardController implements Initializable {
 
             barChartData = saleService.getBarChartData(year);
 
-            XYChart.Series<String, Number> dataSeries = new XYChart.Series<String, Number>();
+            XYChart.Series<String, Number> dataSeries = new XYChart.Series<>();
             dataSeries.setName(year);
 
             for (ISaleTotalAmountByAgentCodeAndYear data:
                  barChartData) {
 
-                dataSeries.getData().add(new XYChart.Data<String, Number>(String.valueOf(data.getAgentCode()), data.getTotalAmount()));
+                dataSeries.getData().add(new XYChart.Data<>(String.valueOf(data.getAgentCode()), data.getTotalAmount()));
             }
 
             barChart.getData().add(dataSeries);
@@ -236,12 +236,12 @@ public class DashboardController implements Initializable {
     }
 
     private void drawLineChart() {
-        XYChart.Series<String, Number> dataSeries = new XYChart.Series<String, Number>();
+        XYChart.Series<String, Number> dataSeries = new XYChart.Series<>();
         dataSeries.setName("All Year");
 
         for (ISumUnitPriceXQuantitySaleByDate data:
              lineChartData) {
-            dataSeries.getData().add(new XYChart.Data<String, Number>(data.getDate().toString(), data.getTotalAmount()));
+            dataSeries.getData().add(new XYChart.Data<>(data.getDate().toString(), data.getTotalAmount()));
         }
 
         lineChart.getData().add(dataSeries);
@@ -251,10 +251,11 @@ public class DashboardController implements Initializable {
         for (ISaleCountByUnitPriceXQuantity data :
                 pieChartData) {
             pieChart.getData().add(new PieChart.Data(
-                    "AB" + String.valueOf(data.getUnitPrice()),
+                    "AB" + data.getUnitPrice(),
                     data.getTotalAmount()
             ));
         }
+
     }
 
     private void clearChart(){
@@ -272,48 +273,36 @@ public class DashboardController implements Initializable {
         drawChart();
     }
 
+    private void toggleComponentWithCheckBox(CheckBox checkBox, Pane parent, Object component) {
+        if (checkBox.isSelected()) {
+            parent.getChildren().add((Node) component);
+        } else {
+            parent.getChildren().remove((Node) component);
+        }
+    }
+
     @FXML
     private void toggleAreaChart(ActionEvent event) {
-        if(areaCB.isSelected()){
-            chartHBox.getChildren().add(areaChart);
-        }else {
-            chartHBox.getChildren().remove(areaChart);
-        }
+        toggleComponentWithCheckBox(areaCB, chartHBox, areaChart);
     }
 
     @FXML
     private void toggleBarChart(ActionEvent event) {
-        if(barCB.isSelected()){
-            chartHBox.getChildren().add(barChart);
-        }else {
-            chartHBox.getChildren().remove(barChart);
-        }
+        toggleComponentWithCheckBox(barCB, chartHBox, barChart);
     }
 
     @FXML
     private void togglePieChart(ActionEvent event) {
-        if(pieCB.isSelected()){
-            chartHBox.getChildren().add(pieChart);
-        }else {
-            chartHBox.getChildren().remove(pieChart);
-        }
+        toggleComponentWithCheckBox(pieCB, chartHBox, pieChart);
     }
 
     @FXML
     private void toggleLineChart(ActionEvent event) {
-        if(lineCB.isSelected()){
-            chartHBox.getChildren().add(lineChart);
-        }else {
-            chartHBox.getChildren().remove(lineChart);
-        }
+        toggleComponentWithCheckBox(lineCB, chartHBox, lineChart);
     }
 
     @FXML
     private void toggleTable(ActionEvent event) {
-        if (tableCB.isSelected()) {
-            rootWindow.setBottom(saleTable);
-        } else {
-            rootWindow.getChildren().remove(saleTable);
-        }
+        toggleComponentWithCheckBox(tableCB, tableHBox, saleTable);
     }
 }
