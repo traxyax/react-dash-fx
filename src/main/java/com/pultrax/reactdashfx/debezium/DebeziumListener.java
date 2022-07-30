@@ -52,6 +52,7 @@ public class DebeziumListener {
     public void stop() throws IOException {
         if (this.debeziumEngine != null) {
             this.debeziumEngine.close();
+            
         }
     }
 }

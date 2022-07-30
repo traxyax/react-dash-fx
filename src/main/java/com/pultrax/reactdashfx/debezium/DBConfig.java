@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
 public class DBConfig {
-
     @Value("${database.host}")
     private String dbHost = "localhost";
 
@@ -13,10 +12,10 @@ public class DBConfig {
     private String dbPort = "3306";
 
     @Value("${database.username}")
-    private String  dbUsername = "trax";
+    private String  dbUsername = "root";
 
     @Value("${database.password}")
-    private String dbPassword = "pass";
+    private String dbPassword = "";
 
     @Value("${database.name}")
     private String dbName = "db_javafx";
